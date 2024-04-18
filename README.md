@@ -1,66 +1,87 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 코멘토링 API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+고양이 온라인 익명 멘토링 서비스입니다.
 
-## About Laravel
+## 요구 사항
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP >= 8.0.2
+- Laravel 9.19
+- Laravel Sanctum을 사용한 API 인증
+- Laravel Socialite를 사용한 GitHub OAuth 로그인
+- API 문서를 위한 Darkaonline/l5-swagger
+- HTTP 요청을 위한 GuzzleHttp
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 설치
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. 레포지토리를 클론합니다:
 
-## Learning Laravel
+    ```bash
+    git clone https://github.com/dochaewon/commetoring.git
+    ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. 프로젝트 디렉터리로 이동합니다:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+    ```bash
+    cd 프로젝트-디렉터리
+    ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. Composer 종속성을 설치합니다:
 
-## Laravel Sponsors
+    ```bash
+    composer install
+    ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+4. `.env` 파일을 설정합니다. 데이터베이스 자격 증명 및 기타 설정을 입력합니다:
 
-### Premium Partners
+    ```bash
+    cp .env.example .env
+    ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+5. 애플리케이션 키를 생성합니다:
 
-## Contributing
+    ```bash
+    php artisan key:generate
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+6. 데이터베이스를 마이그레이션합니다:
 
-## Code of Conduct
+    ```bash
+    php artisan migrate
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+7. (선택 사항) 샘플 데이터로 데이터베이스를 시드합니다:
 
-## Security Vulnerabilities
+    ```bash
+    php artisan db:seed
+    ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+8. Laravel 개발 서버를 시작합니다:
 
-## License
+    ```bash
+    php artisan serve
+    ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 사용법
+
+### 엔드포인트
+
+- **POST /api/register**: 새로운 사용자를 등록합니다.
+- **POST /api/login**: 이메일과 비밀번호로 로그인합니다.
+- **POST /api/logout**: 현재 인증된 사용자를 로그아웃합니다.
+- **GET /api/login/github**: GitHub OAuth 로그인으로 리디렉션합니다.
+- **GET /api/callback/github**: GitHub OAuth 콜백을 처리합니다.
+- **POST /api/questions/{questionId}/answers**: 질문에 대한 새로운 답변을 생성합니다.
+- **DELETE /api/answers/{answerId}**: 특정 답변을 삭제합니다.
+- **PUT /api/questions/{questionId}/answers/{answerId}/select**: 질문에 대한 답변을 선택합니다.
+
+### API 문서
+
+애플리케이션을 실행한 후 `/api/documentation/index.html`에서 API 문서를 확인할 수 있습니다. 각 엔드포인트, 요청 매개변수 및 응답에 대한 자세한 정보를 제공합니다.
+
+## 기여
+
+기여는 환영입니다! 문제점을 발견하거나 개선 제안이 있는 경우 이슈를 열거나 풀 리퀘스트를 제출해주세요.
+
+## 라이선스
+
+이 프로젝트는 MIT 라이선스에 따라 공개 소프트웨어로 사용이 허가됩니다. [MIT 라이선스](LICENSE)를 참조하세요.
