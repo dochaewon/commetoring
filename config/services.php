@@ -37,4 +37,6 @@ return [
         'redirect' => env('GITHUB_REDIRECT_URI'),
     ],
 
+    'L5_SWAGGER_GENERATE_ALWAYS' => env('L5_SWAGGER_GENERATE_ALWAYS', false),
+
 ];

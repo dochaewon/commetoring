@@ -18,28 +18,36 @@ use App\Http\Controllers\AnswerController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    // 이 그룹에 속하는 모든 라우트는 'auth:sanctum' 미들웨어를 적용합니다.
+
+    // 로그아웃
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    // 질문 등록
+    Route::post('/questions', [QuestionController::class, 'store']);
+
+    // 답변 선택
+    Route::put('questions/{questionId}/answers/{answerId}/select', [QuestionController::class, 'selectAnswer']);
+
+    // 답변 작성
+    Route::post('/questions/{question}/answers', [AnswerController::class, 'store']);
+
+    // 답변 삭제
+    Route::delete('/answers/{answer}', [AnswerController::class, 'delete']);
 });
 
-Route::get('login/github', [AuthController::class, 'redirectToGithub']);
-Route::get('callback/github', [AuthController::class, 'handleGithubCallback']);
+// 비인증 사용자를 위한 라우트
+Route::get('/questions', [QuestionController::class, 'index']); // 질문 리스트 가져오기 - 비회원 조회 가능
+Route::get('/questions/{question}', [QuestionController::class, 'show']); // 질문과 답변 가져오기 - 비회원 조회 가능
 
-// 회원가입
-Route::post('/register', [AuthController::class, 'register']);
+// 인증 관련 라우트
+Route::post('/register', [AuthController::class, 'register']); // 회원가입
+Route::post('/login', [AuthController::class, 'login']); // 로그인
 
-// 로그인
-Route::post('/login', [AuthController::class, 'login']);
+// OAuth 관련 라우트
+Route::get('login/github', [AuthController::class, 'redirectToGithub']); // GitHub 로그인
+Route::get('callback/github', [AuthController::class, 'handleGithubCallback']); // GitHub 콜백
 
-// 로그아웃
-Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
-
-
-Route::get('/questions', [QuestionController::class, 'index']); //질문 리스트 가져오기 - 비회원 조회 가능
-Route::get('/questions/{question}', [QuestionController::class, 'show']); //질문과 답변 가져오기 - 비회원 조회 가능
-Route::middleware('auth:sanctum')->post('/questions', [QuestionController::class, 'store']); // 질문 등록 - 비회원 접속 불가능
-Route::middleware('auth:sanctum')->put('questions/{questionId}/answers/{answerId}/select', [QuestionController::class, 'selectAnswer']);
-
-Route::middleware('auth:sanctum')->post('/questions/{question}/answers', [AnswerController::class, 'store']); //답변 작성 - 비회원 접속 불가능
-Route::middleware('auth:sanctum')->delete('/answers/{answer}', [AnswerController::class, 'delete']); //답변 삭제
 
